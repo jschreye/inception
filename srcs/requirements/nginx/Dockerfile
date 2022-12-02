@@ -1,10 +1,10 @@
 FROM    alpine:3.14
 
-RUN        apk update
+RUN     apk update
 
 # Installation de nginx et openssl
-RUN        apk add --no-cache --quiet --update nginx
-RUN        apk add --no-cache --quiet --update openssl
+RUN      apk add --no-cache --quiet --update nginx
+RUN      apk add --no-cache --quiet --update openssl
 
 # Creation du dossier qui va recueillir le certificat et la cle (pour HTTPS)
 RUN        mkdir -p /etc/nginx/ssl
