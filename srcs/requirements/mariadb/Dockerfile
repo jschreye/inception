@@ -1,32 +1,25 @@
-FROM	alpine:3.14
+FROM 	alpine:3.14
 
-RUN		apk update
+# telecharge les nouveaux paqueage si besoin
+RUN 	apk update
 
-# Installation de mariadb et mariadb client
-RUN		apk add --no-cache --quiet --update mariadb mariadb-client vim
+# telecharge mariadb et mysql-client sans retelechager les paquages deja installer
+RUN 	apk add --no-cache --quiet --update mariadb mysql-client
 
-# Creation du dossier pour le daemon
-RUN 	mkdir -p /var/lib/mysqld /run/mysqld
+COPY 	./conf/create_db.sql /tmp/create_db.sql
 
-# Execution du script de creation de la base de donnees
-COPY	./conf/create_db.sql /tmp/create_db.sql
-
-# Copie du script entrypoint sur le container
 COPY	./tools/entrypoint.sh ./
 
 COPY 	./conf/mariadb-server.cnf /etc/my.cnf.d/
 
 RUN 	chmod +x ./entrypoint.sh
 
-# Installation de la base de donnee effective et authentification
-RUN		mariadb-install-db --datadir=/var/lib/mysql \
+# cherche ou se trouve mysql et ensuite le run en tache de fond et demarre le serveur
+RUN		mysql_install_db --datadir=/var/lib/mysql \
 			--auth-root-authentication-method=normal
 
-# Le user mysql doit etre le owner des dossiers relatifs a mysql
+# Donne les droits de pouvoir lire/ecrire dans la db
 RUN		chown -R mysql:mysql /var/lib/mysql 
 
-# Attribution des droits pour le daemon
-RUN 	chown -R mysql:mysql /run/mysqld
-
-# Run entry point script
+# execute le scripte
 ENTRYPOINT [ "sh", "entrypoint.sh" ]
