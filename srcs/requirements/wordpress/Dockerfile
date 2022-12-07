@@ -1,36 +1,26 @@
-FROM	alpine:3.14
+FROM    alpine:3.14
 
-# telechargements des outils php7-iconv (necessaire pour acceder a la partie wp-admin)
-RUN		apk update
-RUN		apk add --no-cache --quiet --update curl bash vim
-RUN		apk add --no-cache --quiet --update mariadb-client
+RUN     apk update && apk upgrade --no-cache
+
 RUN		apk add --no-cache --quiet --update php7 php-phar \
 			php-json php-curl php-fpm php-mysqli php-iconv
 
-# Cree le dossier "standard"
-RUN		mkdir -p /var/www/wordpress 
+RUN     apk add wget bash tar --no-cache
 
-# Telecharger wordpress cli + ajout des droits d execution puisque c est une commande
-RUN		curl https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-			--output /usr/bin/wp 
+RUN     wget -P /var/www/ https://wordpress.org/latest.tar.gz
 
-# ajout des droits d execution sur la command wp cli
-RUN		chmod +x ./usr/bin/wp 
+RUN 	cd /var/www && tar -xzf latest.tar.gz && rm latest.tar.gz
 
-# Telechargement de wordpress via la wp cli
-RUN		wp core download --path=/var/www/wordpress
-
-# Modification du workdir
 WORKDIR /var/www/wordpress
 
-# copie le fichier de config pour que ca puisse marcher sur le container
-COPY	conf/wp-config /config/wp-config
+RUN		wget -P /usr/bin https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 
-# copie le script entrypoint 
-COPY	./tools/entrypoint.sh /tmp/entrypoint.sh
+RUN 	chmod +x /usr/bin/wp-cli.phar
 
-# Ajout des droits d execution sur le script entrypoint
-RUN		chmod +x /tmp/entrypoint.sh
+COPY    conf/wp-config /config/wp-config
 
-# passe par un entrypoint pour eviter les hacky path
+COPY    ./tools/entrypoint.sh /tmp/entrypoint.sh
+
+RUN     chmod +x /tmp/entrypoint.sh
+
 ENTRYPOINT ["sh", "/tmp/entrypoint.sh"]

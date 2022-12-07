@@ -11,9 +11,9 @@ RUN        mkdir -p /etc/nginx/ssl
 
 # Generation des certificats et cles au nom du student
 RUN     openssl req -x509 -nodes \
-    -out /etc/nginx/ssl/jschreye.42.fr.crt \
-    -keyout /etc/nginx/ssl/jschreye.42.fr.key \
-    -subj "/C=CH/ST=Lausanne/L=Renens/O=42/OU=42/CN=jschreye.42.fr/UID=jschreye"
+        -out /etc/nginx/ssl/jschreye.42.fr.crt \
+        -keyout /etc/nginx/ssl/jschreye.42.fr.key \
+        -subj "/C=CH/ST=Lausanne/L=Renens/O=42/OU=42/CN=jschreye.42.fr/UID=jschreye"
 
 # Creation du dossier qui va contenir les fichiers de configurations de nginx pour le serveur
 RUN     mkdir -p /var/run/nginx

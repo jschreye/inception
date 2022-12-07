@@ -1,7 +1,82 @@
-DOCKERFILE:
-    FROM
-    RUN
-    COPY
-    WORKDIR
-    ENTRYPOINT
+DOCKER CMD:
+    - sudo docker-compose 
+    - docker prune volume 
+    -
+
+DOCKER_COMPOSE
+-> file that call the dockerfile of each container to create the images, 
+    creates persistents volumes
+    VOLUMES: keywords
+    - driver :
+    - driver-opts:
+        - device:
+        - type:
+        - o:
+    SRERVICES:
+    - image:
+    - container_name:
+    - restart: specifies when to restart the container
+    - env_file:
+    - environment:
+    - command:
+    - networks:
+    - depends_on:
+    
+MARIADB:
+    Dockerfile:
+    - apk update && upgrade : update packages lists of docker and gets the new ones
+    - --no-cache : avoid bloating up the image with cache files.
+    - apk add --no cache --quiet --update mariadb mysql-client:
+        mysql-client: a transitional package that installs the mariadb client tools
+        mariadb: mariadb package
+    - /var/lib/mysqld : dir that will store the data of the deamon (database)
+    - /run/mysqld : dir containing files telling if the deamon is started.
+    - create_db.sql: cleans the database and create a new user and gives password to root.
+    - chown -R : recursively changes the owner and/or the group of all files in directory.
+        ex: chown -R NewUser:NewGroup DirNameOrPath
+        in our case change from owner and group root to mysqld for the deamon mysql to access and use 
+        those directory for its fonctioning
+
+    Create a MySQL user account and grant privilege:
+    https://www.hostinger.com/tutorials/mysql/how-create-mysql-user-and-grant-permissions-command-line
+        CREATE USER ‘new_user’@’localhost’ IDENTIFY BY ‘password’
+            →new_user identified by password
+        GRANT ALL PRIVILEGES ON * . * TO ‘new_user’@localhost’
+            →grants all privileges to the new user
+        FLUSH PRIVILEGES
+            →needs to be executed for the changes to take place immediately
+        
+        DELETE FROM product WHERE product_id=1
+        -->Delete from: to delete a row in a mysql table
+        -->where: specifies which row to delete
+        DROP DATABASE 
+        --> deletes the database
+
+        CREATE — enable users to create a database or table
+        SELECT — permit users to retrieve data
+        INSERT — let users add new entries in tables
+        UPDATE — allow users to modify existing entries in tables
+        DELETE — enable users to erase table entries
+        DROP — let users delete entire database tables
+
+    Entrypoint:
+        - first see if a .setup is present like this do not recreate the database if the 
+            it was already created
+            if not created will execute create_db.sql
+        - mysql_safe: recomanded way to start mysql server on unix
+                    tries to start an executable named mysql
+                    -- option to overide the default executable in our case we spceify the 
+                        the directory location where the server is located
+    mariadb-server.cnf:
+        config file for mariadb
+        - galera: 
+
+WORDPRESS:
+    Dockerfile:
+        - WORKDIR:
+        - php:  pen source scripting language
+
+    wp-config:
+    https://github.com/WordPress/WordPress/blob/master/wp-config-sample.php
+    some stuff can be removed from the code that we have now (redef of )
 
