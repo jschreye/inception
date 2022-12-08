@@ -5,7 +5,7 @@ RUN     apk update && apk upgrade --no-cache
 RUN		apk add --no-cache --quiet --update php7 php-phar \
 			php-json php-curl php-fpm php-mysqli php-iconv
 
-RUN     apk add wget bash tar --no-cache
+RUN     apk add wget tar --no-cache
 
 RUN     wget -P /var/www/ https://wordpress.org/latest.tar.gz
 

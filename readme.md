@@ -1,4 +1,4 @@
-# insception
+# Insception
 
 > ### Descritpion
 >
@@ -59,7 +59,7 @@
 >* Installer curl -> sudo apt-get install -y curl 
 >* Installer make -> sudo apt-get install -y make 
 >* Installer docker -> sudo apt-get install -y docker.io 
->* Installer docker-compose -> sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+>* Installer docker-compose -> sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-\$(uname -s)-\$(uname -m)" -o /usr/local/bin/docker-compose
 >* Accorder l'autorisation d'exécuter docker compose -> sudo chmod +x /usr/local/bin/docker-compose
 >* Verifier si bien installé -> sudo docker-compose version
 >* Lier le dossier machine hote a la vm 
@@ -75,9 +75,50 @@
 >* Dans la machine hote tapper "ssh your_username@127.0.0.1 -p 2222"
 >* (exit to disconnect)
 
+## Etape 4.5 Snapshot
+
+> !IMPORTANT Faire un snapshot
+>
+> Deconnecte la VM et appuie sur "take" dans le tableau de bord de VirtualBox
+> ![Take](/img_readme/Screen%20Shot%202022-12-01%20at%203.50.27%20PM.png)
+
 ## Etape 5 création des containers
 
->### CMD dockerfile
+>### Création du container nginx
+>#### Dockerfile
+>* [Nginx](https://wiki.alpinelinux.org/wiki/Nginx)
+>* [Create openssl](https://linuxize.com/post/creating-a-self-signed-ssl-certificate/)
+>#### Config
+>* [Nginx config](https://grafikart.fr/tutoriels/nginx-692)
+>* [Nginx config](https://www.digitalocean.com/community/tools/nginx?global.app.lang=fr)
+
+>### Création du container wordpress-php
+>#### Dockerfile
+>* [Wordpress](https://wiki.alpinelinux.org/wiki/WordPress)
+>* [Wget](https://doc.ubuntu-fr.org/wget)
+>* [Wp.cli](https://wp-cli.org/fr/)
+>* [Wp core download](https://developer.wordpress.org/cli/commands/core/download/)
+>#### Script
+> Ici il faut écrire un script bash pour mettre en place le site internet (amuse toi bien^^)
+>#### Config
+>* [Wordpress config](https://www.wpbeginner.com/beginners-guide/how-to-edit-wp-config-php-file-in-wordpress/)
+>* [Info wordpress config](https://github.com/WordPress/WordPress/blob/master/wp-config-sample.php)
+>* [Info wordpress config](https://fr.wordpress.org/support/article/editing-wp-config-php/)
+
+>### Création du container mariaDB
+>#### Dockerfile
+>* [Mariadb](https://wiki.alpinelinux.org/wiki/MariaDB)
+>#### Script
+> Ici il faudra créer un script bash pour lancer les CMDs SQL afin de créer la BDD et si possible éviter de la recréer a chaque fois que l'on relance un container.
+>#### Config
+>* [Create db](https://www.guru99.com/mariadb-tutorial-install.html)
+>* [Create user](https://phoenixnap.com/kb/how-to-create-mariadb-user-grant-privileges)
+>* [Info .cnf](https://mariadb.com/kb/en/configuring-mariadb-with-option-files/)
+>* [Info .cnf](https://gist.github.com/fevangelou/fb72f36bbe333e059b66)
+>* [Info .cnf](https://exampleconfig.com/view/mariadb-ubuntu18-04-etc-mysql-mariadb-conf-d-50-server-cnf)
+>* [Info .cnf](https://gist.github.com/Ishotihadus/1cdce4509819cabda983055dc25af26d)
+
+>### DOC dockerfile
 >
 > [Dockerfile reference](https://docs.docker.com/engine/reference/builder/)
 >* FROM Image parente
@@ -96,34 +137,26 @@
 >* CMD Exécuter une commande au démarrage du conteneur
 >* ENTRYPOINT Exécuter une commande au démarrage du conteneur
 
->### Création du container nginx
->#### Dockerfile
->#### Script
-
->### Création du container wordpress-php
->#### Dockerfile
->#### Script
-
->### Création du container mariaDB
->#### Dockerfile
->#### Script
-
-## Création d'un docker-compose.yml
-
->![ex .yml](/img_readme/1_TeBgetHlGCePc9Nq0__AtQ.png)
+>### DOC Création d'un docker-compose.yml
 >
->[doc docker-compose.yml](https://docs.docker.com/compose/compose-file/)
-
-## Création d'un script bash
-
->Ici nous avons besoin d'un script pour......
-> 
->[doc script bash ubuntu](https://doc.ubuntu-fr.org/tutoriel/script_shell)
+>[Doc docker-compose.yml](https://docs.docker.com/compose/compose-file/)
 >
->[doc script bash freeCodeCamp](https://www.freecodecamp.org/news/shell-scripting-crash-course-how-to-write-bash-scripts-in-linux/)
+>[Volume info](https://stackoverflow.com/questions/36387032/how-to-set-a-path-on-host-for-a-named-volume-in-docker-compose-yml)
+>
+>![Ex .yml](/img_readme/1_TeBgetHlGCePc9Nq0__AtQ.png)
+
+>### DOC Création d'un script bash
+>
+>[Doc script bash ubuntu](https://doc.ubuntu-fr.org/tutoriel/script_shell)
+>
+>[Doc script bash freeCodeCamp](https://www.freecodecamp.org/news/shell-scripting-crash-course-how-to-write-bash-scripts-in-linux/)
 >
 >[Bash scripting cheatsheet](https://devhints.io/bash)
 
+## Etape 6 création du Makefile
+
+>* [Makefile info](http://www.inanzzz.com/index.php/post/wqfy/a-makefile-example-with-docker-compose-commands)
+>* [Makefile info](https://itnext.io/docker-makefile-x-ops-sharing-infra-as-code-parts-ea6fa0d22946)
 
 ## CMD utile
 
@@ -136,6 +169,11 @@
 >* "ps" affiche les process en cour
 >* "tree" affiche l'arborésence du dossier courant (à dl via brew)
 >* "cat /etc/hosts" affiche le fichier etc/hosts
+
+> ### CMD docker-compose
+>
+>* "docker-compose up -d" pour lancer la creation des container via le fichier .yml
+>*  
 
 >### CMD Docker utile
 >* "docker ps" liste les containers sur la machine
@@ -182,3 +220,9 @@
 >* [Debian](https://www.debian.org/releases/buster/)
 >* [Docker](https://docs.docker.com/get-started/overview/)
 >* [Docker-compose tuto](https://linuxiac.com/how-to-set-up-lemp-stack-with-docker-compose/)
+>* [Certif-ssl](https://linuxize.com/post/creating-a-self-signed-ssl-certificate/)
+>* [Nginx](https://wiki.alpinelinux.org/wiki/Nginx)
+>* [Wordpress](https://wiki.alpinelinux.org/wiki/WordPress)
+>* [Mariadb](https://wiki.alpinelinux.org/wiki/MariaDB)
+>* [Curl](https://www.hostinger.fr/tutoriels/comment-utiliser-la-commande-curl-sous-linux)
+>* [Wp.cli](https://wp-cli.org/fr/)
